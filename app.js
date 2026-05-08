@@ -11,6 +11,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var demoRouter = require("./routes/demo");
 var todoRouter = require('./routes/todos');
+let movieRouter = require("./routes/movie");
 const adminAuth = require("./middleware/adminAuth");
 const adminRouter = require("./routes/admin");
 const ownLogger = require("./middleware/customLogger");
@@ -35,6 +36,7 @@ app.use("/users", usersRouter);
 app.use("/demo", demoRouter);
 app.use("/admin", adminRouter);
 app.use("/todos",todoRouter);
+app.use("/movies",movieRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
