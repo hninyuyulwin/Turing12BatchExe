@@ -4,21 +4,25 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
-const mongoose = require('mongoose');
-const {db} = require("./config/database");
+const mongoose = require("mongoose");
+const { db } = require("./config/database");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var demoRouter = require("./routes/demo");
-var todoRouter = require('./routes/todos');
+var todoRouter = require("./routes/todos");
 let movieRouter = require("./routes/movie");
+let reviewRouter = require("./routes/review");
 const adminAuth = require("./middleware/adminAuth");
 const adminRouter = require("./routes/admin");
 const ownLogger = require("./middleware/customLogger");
+const auth = require("./middleware/auth");
 var app = express();
-      
-mongoose.connect(db).then(() => console.log("MongoDB Connected!"))
-      .catch(err => console.log(err));
+
+mongoose
+  .connect(db)
+  .then(() => console.log("MongoDB Connected!"))
+  .catch((err) => console.log(err));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -35,8 +39,9 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/demo", demoRouter);
 app.use("/admin", adminRouter);
-app.use("/todos",todoRouter);
-app.use("/movies",movieRouter);
+app.use("/todos", todoRouter);
+app.use("/movies", auth.verifyToken, movieRouter);
+app.use("/reviews", reviewRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
